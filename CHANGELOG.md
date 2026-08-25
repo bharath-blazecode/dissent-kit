@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added a no-install route and a one-request Codex installation path.
+- Added a plain-language installation guide for nontechnical users.
+- Reframed platform support around how Deliberation runs instead of presenting unavailable isolated passes as a missing mode.
+
 ## 0.2.0
 
 - Restored the chess inspiration as a mnemonic for the five functional lenses.

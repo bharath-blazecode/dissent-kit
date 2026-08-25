@@ -59,6 +59,28 @@ See [how DissentKit routes a request](docs/how-it-works.md) for the full pathway
 
 ## Install
 
+### Try it without installing
+
+Open [the universal prompt](platforms/universal/PROMPT.md), copy its contents into your AI assistant, and say:
+
+```text
+dissent this
+```
+
+This gives you Direct Review and single-context Deliberation without changing files or settings.
+
+### Install in Codex with one request
+
+Open a Codex task and paste:
+
+```text
+$skill-installer Install DissentKit from https://github.com/bharath-blazecode/dissent-kit using the repository root, and name it dissent-kit.
+```
+
+The skill becomes available on the next turn. Invoke it as `$dissent-kit`, or say `dissent this`.
+
+For manual setup and instructions for other assistants, see [the plain-language installation guide](INSTALL.md).
+
 ### Codex and ChatGPT desktop
 
 For personal use, place this repository at:
@@ -81,7 +103,7 @@ Copy the skill folder to `~/.claude/skills/dissent-kit/`. See [the Claude Code n
 
 ### ChatGPT Custom GPT
 
-Paste [the Custom GPT instructions](platforms/chatgpt/custom-gpt-instructions.md) into the GPT's Instructions field.
+If your ChatGPT account or workspace allows GPT creation, paste [the Custom GPT instructions](platforms/chatgpt/custom-gpt-instructions.md) into the GPT's Instructions field. Otherwise, use [the universal prompt](platforms/universal/PROMPT.md) in a regular conversation.
 
 ### Cursor
 
@@ -97,15 +119,17 @@ Paste [the universal prompt](platforms/universal/PROMPT.md) at the start of a co
 
 ## Platform behavior
 
-| Adapter | Direct Review | Deliberation | Isolated passes guaranteed? | Scope |
-| --- | --- | --- | --- | --- |
-| Open agent skill | Yes | Yes | Host dependent | Invoked or matched |
-| Codex `AGENTS.md` example | Yes | Yes | No | Repository-wide |
-| Claude Code skill | Yes | Yes | Host dependent | Invoked or matched |
-| Custom GPT | Yes | Single-context | No | GPT-wide |
-| Cursor rule | Yes | Single-context unless tools allow more | No | Rule-dependent |
-| Copilot instructions | Yes | Single-context | No | Repository-wide |
-| Universal prompt | Yes | Single-context | No | Conversation-wide |
+| Platform | Direct Review | Deliberation | How Deliberation runs |
+| --- | --- | --- | --- |
+| Codex skill | Yes | Yes | Isolated passes when the host supports them; otherwise five lenses in one context |
+| Codex `AGENTS.md` example | Yes | Yes | Five lenses in one context unless agent tools are available |
+| Claude Code skill | Yes | Yes | Isolated passes when available; otherwise five lenses in one context |
+| ChatGPT instructions | Yes | Yes | Five lenses in one context |
+| Cursor rule | Yes | Yes | Five lenses in one context unless agent tools are available |
+| GitHub Copilot | Yes | Yes | Five lenses in one context |
+| Universal prompt | Yes | Yes | Five lenses in one context |
+
+DissentKit always supports Direct Review and Deliberation. Some hosts can run the five lenses as isolated agent passes. Others run them sequentially in one conversation. The workflow remains available either way, but DissentKit does not describe a single-model review as independent consensus.
 
 ## Example
 
