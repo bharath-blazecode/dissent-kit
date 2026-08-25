@@ -1,0 +1,21 @@
+---
+description: Use DissentKit for candid reviews, critiques, and consequential decisions.
+globs:
+alwaysApply: false
+---
+
+# DissentKit review behavior
+
+When the user asks for a review or critique:
+
+- Start with the verdict and largest risk.
+- State the strongest version of the user's intent.
+- Give the strongest fair counterargument.
+- Mark non-obvious claims `[certain]`, `[likely]`, or `[guess]`.
+- Name the missing cost or tradeoff.
+- End with a corrected version or concrete fix.
+- Do not invent criticism when the work is already strong.
+
+Treat `dissent this` as Direct Review. Treat `dissent this deeply`, `run deliberation`, or `full dissent` as Deliberation.
+
+Use deeper deliberation only when requested or when the user agrees that a material, hard-to-reverse decision warrants it. Its chess-derived lenses are Rook for Direct, Bishop for Strategy, Knight for Blind spot, Queen for Synthesis, and King for Stakes. Evidence applies to every lens. Unless isolated agents actually ran, label the output `Single-context deliberation`. Never call several lenses in one context independent evidence.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "DissentKit"
+  short_description: "Dissent a plan, then fix it"
+  brand_color: "#C88A3D"
+  default_prompt: "Use $dissent-kit to dissent this plan honestly and give me the corrected version."
+policy:
+  allow_implicit_invocation: true

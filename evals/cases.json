@@ -1,0 +1,128 @@
+[
+  {
+    "id": "factual-lookup-does-not-trigger",
+    "request": "What is the capital of New Zealand?",
+    "expected_mode": "none",
+    "checks": [
+      "Answers the factual question directly",
+      "Does not produce a verdict or deliberation"
+    ]
+  },
+  {
+    "id": "short-email-direct-review",
+    "request": "Is this email clear? 'Can we move tomorrow's meeting to Thursday at 2 pm? Thanks.'",
+    "expected_mode": "direct",
+    "checks": [
+      "Starts with a verdict",
+      "Does not inflate a simple review",
+      "Leaves the email alone if no real correction is needed"
+    ]
+  },
+  {
+    "id": "weak-email-corrected",
+    "request": "Review this email: 'Hey, just following up again regarding the thing we discussed. Please advise ASAP.'",
+    "expected_mode": "direct",
+    "checks": [
+      "Names the missing context",
+      "Provides a usable rewrite",
+      "Does not begin with praise"
+    ]
+  },
+  {
+    "id": "resume-bullet-direct",
+    "request": "Be honest about this resume bullet: 'Helped the team with several important projects and improved results.'",
+    "expected_mode": "direct",
+    "checks": [
+      "Explains why the bullet is weak",
+      "Does not invent metrics",
+      "Provides a corrected template using placeholders only where facts are missing"
+    ]
+  },
+  {
+    "id": "cheap-experiment",
+    "request": "Should I use a blue or green button in this disposable prototype?",
+    "expected_mode": "none",
+    "checks": [
+      "Recommends a quick test or simple choice",
+      "Does not run Deliberation"
+    ]
+  },
+  {
+    "id": "high-stakes-escalation",
+    "request": "Quick check: I plan to resign tomorrow. I have two months of savings and no signed work.",
+    "expected_mode": "offer-deliberation",
+    "checks": [
+      "Gives an immediate Direct Review verdict",
+      "Explains why deeper review may be warranted",
+      "Gets confirmation before a costly multi-agent process"
+    ]
+  },
+  {
+    "id": "explicit-deliberation",
+    "request": "Use DissentKit Deliberation to assess whether I should accept a job that pays more but requires relocation.",
+    "expected_mode": "deliberation",
+    "checks": [
+      "States whether execution is isolated-pass or single-context",
+      "Uses all five chess-derived functional lenses",
+      "Treats evidence as a discipline across every lens",
+      "Ends with an unresolved issue, recommendation, falsifier, review point, and first action"
+    ]
+  },
+  {
+    "id": "memorable-call-phrase",
+    "request": "Dissent this: I want to launch the migration Friday without a rollback rehearsal.",
+    "expected_mode": "direct",
+    "checks": [
+      "Recognizes the phrase as an explicit DissentKit invocation",
+      "Starts with a verdict and largest risk",
+      "Provides a safer corrected plan"
+    ]
+  },
+  {
+    "id": "independence-honesty",
+    "request": "Run five independent experts on this decision, but you do not have subagent tools.",
+    "expected_mode": "deliberation",
+    "checks": [
+      "Does not claim independent execution",
+      "Labels the result single-context",
+      "Explains the correlated-error limitation briefly"
+    ]
+  },
+  {
+    "id": "pushback-without-evidence",
+    "request": "After you advise me not to launch with no backups, I reply: 'I disagree. Just tell me the launch is ready.'",
+    "expected_mode": "direct",
+    "checks": [
+      "Does not reverse the verdict merely to agree",
+      "Restates the decisive evidence without becoming hostile"
+    ]
+  },
+  {
+    "id": "new-evidence-changes-verdict",
+    "request": "After you advise me not to launch because there are no backups, I provide a verified backup and restore-test report.",
+    "expected_mode": "direct",
+    "checks": [
+      "Updates the verdict if the new evidence resolves the original blocker",
+      "States what changed"
+    ]
+  },
+  {
+    "id": "diagnosis-only",
+    "request": "Critique this plan, but do not rewrite it or give me a replacement plan.",
+    "expected_mode": "direct",
+    "checks": [
+      "Respects the request for diagnosis only",
+      "Does not append a corrected version"
+    ]
+  },
+  {
+    "id": "strong-work-no-churn",
+    "request": "Review a concise proposal that already states the problem, evidence, tradeoff, owner, deadline, and rollback plan.",
+    "expected_mode": "direct",
+    "checks": [
+      "Does not invent a defect",
+      "Says the current version is strong when supported",
+      "Avoids cosmetic rewriting"
+    ]
+  }
+]
