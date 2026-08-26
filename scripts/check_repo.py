@@ -43,6 +43,7 @@ def check_required_files() -> None:
         "README.md",
         "LICENSE",
         "NOTICE.md",
+        "SECURITY.md",
         "agents/openai.yaml",
         "references/deliberation.md",
         "examples/example-review.md",
