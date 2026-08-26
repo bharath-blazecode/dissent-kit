@@ -3,7 +3,7 @@ name: dissent-kit
 description: Give candid, verdict-first feedback on writing, plans, decisions, and arguments, then supply a concrete correction. Use Direct Review for ordinary critique. Use Deliberation only when the user requests it or the decision has material downside, competing values, or is hard to reverse. Do not use for factual lookups or cheap experiments.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # DissentKit
