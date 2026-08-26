@@ -28,8 +28,8 @@ def check_required_files() -> None:
         "references/deliberation.md",
         "examples/example-review.md",
         "evals/cases.json",
-        "assets/dissent-kit-social-preview-v2.png",
-        "assets/dissent-kit-internal-workflow.png",
+        "assets/dissent-kit-social-preview-v2.jpg",
+        "assets/dissent-kit-internal-workflow.jpg",
         "platforms/codex/README.md",
         "platforms/cursor/.cursor/rules/dissent-kit.mdc",
     ]
@@ -117,24 +117,67 @@ def check_eval_cases() -> None:
             fail(f"Eval case {case_id} has no checks")
 
 
-def read_png_size(relative: str) -> tuple[int, int] | None:
+def read_jpeg_size(relative: str) -> tuple[int, int] | None:
     path = ROOT / relative
     try:
         with path.open("rb") as handle:
-            signature = handle.read(24)
+            if handle.read(2) != b"\xff\xd8":
+                fail(f"{relative} is not a valid JPEG")
+                return None
+
+            while True:
+                byte = handle.read(1)
+                if not byte:
+                    break
+                if byte != b"\xff":
+                    continue
+
+                marker = handle.read(1)
+                while marker == b"\xff":
+                    marker = handle.read(1)
+                if not marker or marker in {b"\xd8", b"\xd9"}:
+                    continue
+
+                length_bytes = handle.read(2)
+                if len(length_bytes) != 2:
+                    break
+                segment_length = struct.unpack(">H", length_bytes)[0]
+                if segment_length < 2:
+                    break
+
+                if marker[0] in {
+                    0xC0,
+                    0xC1,
+                    0xC2,
+                    0xC3,
+                    0xC5,
+                    0xC6,
+                    0xC7,
+                    0xC9,
+                    0xCA,
+                    0xCB,
+                    0xCD,
+                    0xCE,
+                    0xCF,
+                }:
+                    dimensions = handle.read(5)
+                    if len(dimensions) != 5:
+                        break
+                    height, width = struct.unpack(">HH", dimensions[1:])
+                    return width, height
+
+                handle.seek(segment_length - 2, 1)
     except OSError as exc:
         fail(f"Cannot read {relative}: {exc}")
         return None
 
-    if len(signature) < 24 or signature[:8] != b"\x89PNG\r\n\x1a\n":
-        fail(f"{relative} is not a valid PNG")
-        return None
-    return struct.unpack(">II", signature[16:24])
+    fail(f"Cannot read JPEG dimensions from {relative}")
+    return None
 
 
 def check_preview_images() -> None:
-    preview = "assets/dissent-kit-social-preview-v2.png"
-    preview_size = read_png_size(preview)
+    preview = "assets/dissent-kit-social-preview-v2.jpg"
+    preview_size = read_jpeg_size(preview)
     if preview_size is None:
         return
     width, height = preview_size
@@ -143,9 +186,11 @@ def check_preview_images() -> None:
     ratio = width / height
     if not 1.8 <= ratio <= 2.2:
         fail(f"Social preview should be close to 2:1, got {width}x{height}")
+    if (ROOT / preview).stat().st_size >= 1_000_000:
+        fail(f"Social preview must be under 1 MB: {preview}")
 
-    workflow = "assets/dissent-kit-internal-workflow.png"
-    workflow_size = read_png_size(workflow)
+    workflow = "assets/dissent-kit-internal-workflow.jpg"
+    workflow_size = read_jpeg_size(workflow)
     if workflow_size is None:
         return
     width, height = workflow_size
@@ -154,6 +199,8 @@ def check_preview_images() -> None:
     ratio = width / height
     if not 1.6 <= ratio <= 1.95:
         fail(f"Internal workflow image should be wide, got {width}x{height}")
+    if (ROOT / workflow).stat().st_size >= 1_000_000:
+        fail(f"Internal workflow image must be under 1 MB: {workflow}")
 
 
 def check_deprecated_files() -> None:

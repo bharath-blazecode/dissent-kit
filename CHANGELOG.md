@@ -1,10 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
 - Added a no-install route and a one-request Codex installation path.
 - Added a plain-language installation guide for nontechnical users.
 - Reframed platform support around how Deliberation runs instead of presenting unavailable isolated passes as a missing mode.
+- Replaced the oversized PNG artwork with optimized JPEGs that meet GitHub's social-preview limit.
+- Added image-size validation and visible CI, license, and version badges.
+- Updated the launch kit for the live repository and the 0.3.0 release.
 
 ## 0.2.0
 

@@ -1,6 +1,10 @@
 # DissentKit
 
-![DissentKit pathway with five chess-derived lenses](assets/dissent-kit-social-preview-v2.png)
+[![Validate DissentKit](https://github.com/bharath-blazecode/dissent-kit/actions/workflows/validate.yml/badge.svg)](https://github.com/bharath-blazecode/dissent-kit/actions/workflows/validate.yml)
+[![MIT License](https://img.shields.io/github/license/bharath-blazecode/dissent-kit)](LICENSE)
+![Version 0.3.0](https://img.shields.io/badge/version-0.3.0-C69442)
+
+![DissentKit pathway with five chess-derived lenses](assets/dissent-kit-social-preview-v2.jpg)
 
 **Dissent this. Then fix it.**
 
@@ -53,7 +57,7 @@ Evidence is not one seat at the table. It is the rule every seat follows. Each l
 
 The chess origin gives people a picture they can remember without turning the review into character role-play.
 
-![How the chess-derived lenses work](assets/dissent-kit-internal-workflow.png)
+![Five chess pieces mapped to Direct, Strategy, Blind spot, Synthesis, and Stakes, followed by Frame, Pre-mortem, Challenge, Verdict, and Falsifier](assets/dissent-kit-internal-workflow.jpg)
 
 See [how DissentKit routes a request](docs/how-it-works.md) for the full pathway.
 

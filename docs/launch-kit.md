@@ -25,12 +25,12 @@ open-source
 
 ## Social preview
 
-Upload `assets/dissent-kit-social-preview-v2.png` in the repository's social preview settings. The same image appears at the top of the README. The internal workflow graphic is `assets/dissent-kit-internal-workflow.png`.
+Upload `assets/dissent-kit-social-preview-v2.jpg` in the repository's social preview settings. The file is under GitHub's 1 MB limit. After uploading it, share the repository URL once and confirm that the custom image appears. The internal workflow graphic is `assets/dissent-kit-internal-workflow.jpg`.
 
 ## Release title
 
 ```text
-DissentKit 0.2.0: dissent this, then fix it
+DissentKit 0.3.0: dissent this, then fix it
 ```
 
 ## Release notes
@@ -42,7 +42,7 @@ Direct Review handles ordinary writing, plans, arguments, and reversible choices
 
 Deliberation is reserved for decisions with material downside or lock-in. Its five functional lenses come from chess: Rook for Direct, Bishop for Strategy, Knight for Blind spot, Queen for Synthesis, and King for Stakes. It challenges weak premises, tracks confidence changes, and ends with a falsifier and review point.
 
-The first release includes adapters for Codex, Claude Code, ChatGPT, Cursor, GitHub Copilot, and assistants that accept a pasted prompt. It also states whether a deliberation used isolated model passes or one shared context.
+Version 0.3.0 includes adapters for Codex, Claude Code, ChatGPT, Cursor, GitHub Copilot, and assistants that accept a pasted prompt. People can try it without installing anything, and Codex users can request installation in one sentence. DissentKit states whether a deliberation used isolated model passes or one shared context.
 ```
 
 ## Launch post
@@ -58,21 +58,21 @@ One design choice mattered to me: if five lenses run inside one model context, D
 
 The repo includes adapters for Codex, Claude Code, ChatGPT, Cursor, and GitHub Copilot, plus evaluation cases and the full decision pathway.
 
-Repository: [add the public URL after publishing]
+Repository: https://github.com/bharath-blazecode/dissent-kit
 ```
 
 ## Launch checklist
 
-1. Create the public repository with the name `dissent-kit`.
-2. Add the description and topics above.
-3. Upload the social preview image.
-4. Pin the worked example near the top of the README if early readers miss it.
-5. Create the `0.1.0` release with the supplied notes.
-6. Run every case in `evals/cases.json` on the main host you plan to advertise.
-7. Publish the raw outputs and scoring notes before quoting a pass rate.
-8. Share one concrete before-and-after example, not a list of features.
-9. Ask early users for failed prompts and turn recurring failures into fixtures.
-10. Tag the first stable revision only after installation has been tested from a clean folder.
+1. Merge the launch-integrity changes into `main`.
+2. Add the description and topics above in the repository settings.
+3. Upload `assets/dissent-kit-social-preview-v2.jpg` and verify the shared-link preview.
+4. Test installation from a clean folder.
+5. Create and push the `v0.3.0` tag.
+6. Create the GitHub release with the supplied notes.
+7. Run every case in `evals/cases.json` on the main host you plan to advertise.
+8. Publish raw outputs and scoring notes before quoting a pass rate.
+9. Share one concrete before-and-after example instead of a feature list.
+10. Turn recurring failed prompts into evaluation fixtures.
 
 ## What to avoid
 
