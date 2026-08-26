@@ -8,7 +8,10 @@ import json
 import re
 import struct
 import sys
+import tempfile
 from pathlib import Path
+
+from eval_report import make_report
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,6 +43,7 @@ def check_required_files() -> None:
         "README.md",
         "LICENSE",
         "NOTICE.md",
+        "SECURITY.md",
         "agents/openai.yaml",
         "references/deliberation.md",
         "examples/example-review.md",
@@ -249,6 +253,50 @@ def check_eval_cases() -> None:
             fail(f"Eval case {case_id} has no checks")
 
 
+def check_eval_report_smoke() -> None:
+    cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+    case = cases[0]
+    with tempfile.TemporaryDirectory() as temporary:
+        run_dir = Path(temporary)
+        raw_dir = run_dir / "raw"
+        raw_dir.mkdir()
+        (raw_dir / "output.md").write_text("Fixture output\n", encoding="utf-8")
+        run = {
+            "metadata": {
+                "host": "validator",
+                "model": "fixture",
+                "model_settings": "default",
+                "adapter": "root SKILL.md",
+                "source_commit": "0" * 40,
+                "grader": "validator fixture",
+                "date": "2026-08-26",
+                "dissent_kit_version": skill_version() or "unknown",
+            },
+            "results": [
+                {
+                    "id": case["id"],
+                    "raw_output": "raw/output.md",
+                    "checks": [True] * len(case["checks"]),
+                    "notes": "Smoke test",
+                }
+            ],
+        }
+        run_path = run_dir / "run.json"
+        run_path.write_text(json.dumps(run), encoding="utf-8")
+        try:
+            report = make_report(run_path, allow_partial=True)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            fail(f"Evaluation report smoke test failed: {exc}")
+            return
+        for marker in (
+            "- Source commit: " + "0" * 40,
+            "- Grader: validator fixture",
+            "[open](raw/output.md)",
+        ):
+            if marker not in report:
+                fail(f"Evaluation report smoke test is missing: {marker}")
+
+
 def read_jpeg_size(relative: str) -> tuple[int, int] | None:
     path = ROOT / relative
     try:
@@ -369,6 +417,7 @@ def main() -> int:
     check_markdown_links()
     check_public_prose()
     check_eval_cases()
+    check_eval_report_smoke()
     check_preview_images()
     check_deprecated_files()
     check_python_syntax()

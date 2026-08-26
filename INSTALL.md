@@ -30,6 +30,29 @@ $dissent-kit Review this plan.
 Dissent this.
 ```
 
+## Install across supported coding agents
+
+If Node.js is installed, the open [skills CLI](https://github.com/vercel-labs/skills) can discover DissentKit from GitHub and ask which detected agent should receive it:
+
+```bash
+npx skills add bharath-blazecode/dissent-kit
+```
+
+Verify the result:
+
+```bash
+npx skills list
+```
+
+Update or remove it later:
+
+```bash
+npx skills update dissent-kit
+npx skills remove dissent-kit
+```
+
+The command was checked against the public repository and discovered exactly one skill named `dissent-kit`. Installation locations still depend on the selected agent, so use that agent's documented skill directory if you choose manual setup.
+
 ## Codex manual installation
 
 If the GitHub release includes `dissent-kit-0.3.0.zip`, download that file and extract it. It already contains a folder named `dissent-kit` with only the files the skill needs.

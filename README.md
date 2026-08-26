@@ -12,6 +12,34 @@ DissentKit is an open agent skill for people who want a real second opinion. It 
 
 It does not create five imaginary experts for every question. Most reviews need one clear answer. When the stakes justify more work, DissentKit adds defined lenses, challenge rounds, confidence tracking, and a concrete way to test the final recommendation later.
 
+## See the difference
+
+> **Request:** Dissent this: I want to launch the migration Friday without a rollback rehearsal.
+
+A generic answer might say the launch is risky and suggest testing first. DissentKit makes the decision and the safer next step explicit:
+
+> **Verdict:** Do not launch Friday without a rollback rehearsal. Functional migration tests do not prove that recovery works. Run a time-boxed rehearsal before the go or no-go decision, record the trigger, owner, commands, recovery time, and data-integrity check, and move the migration if the rehearsal fails.
+
+This is an author-written illustration, not a benchmark result. Read [the full comparison](examples/quick-comparison.md), including the counterargument and missing tradeoff.
+
+## Try it in 30 seconds
+
+**No installation:** open [the universal prompt](platforms/universal/PROMPT.md), copy it into your assistant, and say `dissent this`.
+
+**Codex:** paste this into a Codex task:
+
+```text
+$skill-installer Install DissentKit from https://github.com/bharath-blazecode/dissent-kit using the repository root, and name it dissent-kit.
+```
+
+**Supported coding agents:** if Node.js is installed, let the open [skills CLI](https://github.com/vercel-labs/skills) detect your agent:
+
+```bash
+npx skills add bharath-blazecode/dissent-kit
+```
+
+Confirm the installation with `npx skills list`. See [the installation guide](INSTALL.md) for updates, removal, release ZIPs, and manual platform setup.
+
 ## What it does
 
 | Mode | Best for | Output |
@@ -61,7 +89,7 @@ The chess origin gives people a picture they can remember without turning the re
 
 See [how DissentKit routes a request](docs/how-it-works.md) for the full pathway.
 
-## Install
+## Installation details
 
 ### Try it without installing
 
@@ -84,6 +112,16 @@ $skill-installer Install DissentKit from https://github.com/bharath-blazecode/di
 The skill becomes available on the next turn. Invoke it as `$dissent-kit`, or say `dissent this`.
 
 For manual setup and instructions for other assistants, see [the plain-language installation guide](INSTALL.md).
+
+### Install with the cross-agent CLI
+
+The public repository is discoverable as one skill named `dissent-kit`:
+
+```bash
+npx skills add bharath-blazecode/dissent-kit
+```
+
+The installer supports multiple coding agents and asks where and how to install the skill. It requires Node.js. Use the universal prompt if you do not want to install software.
 
 ### Codex and ChatGPT desktop
 
@@ -162,6 +200,8 @@ python scripts/build_skill_package.py
 ```
 
 The command creates a versioned ZIP and SHA-256 checksum in `dist/`. The archive extracts to a single `dissent-kit` folder that can be placed in a supported skills directory.
+
+The archive includes `agents/openai.yaml`, which supplies DissentKit's display name, short description, brand color, default prompt, and implicit-invocation policy to OpenAI-compatible skill interfaces. It does not execute code or contact an external service.
 
 ## Origins
 

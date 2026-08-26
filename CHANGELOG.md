@@ -16,6 +16,11 @@
 - Added adapter, metadata, version, package-manifest, script, and empty-file validation.
 - Expanded CI to test and package the skill on Windows and Linux.
 - Added issue forms, a pull request template, CODEOWNERS, and maintainer guidance.
+- Moved a concrete result and the fastest trial paths near the top of the README.
+- Added a verified cross-agent installer route with update and removal commands.
+- Made previously abstract evaluation cases self-contained.
+- Expanded evaluation provenance and linked reports to their raw outputs.
+- Added security reporting guidance and clarified package reproducibility limits.
 
 ## 0.2.0
 

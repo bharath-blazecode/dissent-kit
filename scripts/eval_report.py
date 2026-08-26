@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from urllib.parse import quote
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,7 +37,16 @@ def make_report(run_path: Path, allow_partial: bool) -> str:
 
     metadata = run.get("metadata")
     results = run.get("results")
-    required_metadata = {"host", "model", "date", "dissent_kit_version"}
+    required_metadata = {
+        "host",
+        "model",
+        "model_settings",
+        "adapter",
+        "source_commit",
+        "grader",
+        "date",
+        "dissent_kit_version",
+    }
     if not isinstance(metadata, dict) or not required_metadata <= metadata.keys():
         raise ValueError(f"metadata must include {sorted(required_metadata)}")
     if not isinstance(results, list):
@@ -82,6 +92,7 @@ def make_report(run_path: Path, allow_partial: bool) -> str:
                 "passed": all(grades),
                 "checks_passed": sum(grades),
                 "checks_total": len(grades),
+                "raw_output": raw_output.replace("\\", "/"),
                 "notes": str(result.get("notes", "")).strip(),
             }
         )
@@ -102,6 +113,10 @@ def make_report(run_path: Path, allow_partial: bool) -> str:
         "",
         f"- Host: {metadata['host']}",
         f"- Model: {metadata['model']}",
+        f"- Model settings: {metadata['model_settings']}",
+        f"- Adapter: {metadata['adapter']}",
+        f"- Source commit: {metadata['source_commit']}",
+        f"- Grader: {metadata['grader']}",
         f"- Date: {metadata['date']}",
         f"- DissentKit version: {metadata['dissent_kit_version']}",
         f"- Status: {status}",
@@ -110,8 +125,8 @@ def make_report(run_path: Path, allow_partial: bool) -> str:
         "",
         "A case passes only when every listed check passes. Raw outputs remain in the run directory.",
         "",
-        "| Case | Expected mode | Result | Checks | Notes |",
-        "| --- | --- | --- | --- | --- |",
+        "| Case | Expected mode | Result | Checks | Raw output | Notes |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for item in normalized:
         outcome = "Pass" if item["passed"] else "Fail"
@@ -120,7 +135,8 @@ def make_report(run_path: Path, allow_partial: bool) -> str:
         )
         lines.append(
             f"| {item['id']} | {item['mode']} | {outcome} | "
-            f"{item['checks_passed']}/{item['checks_total']} | {notes} |"
+            f"{item['checks_passed']}/{item['checks_total']} | "
+            f"[open]({quote(str(item['raw_output']), safe='/._-')}) | {notes} |"
         )
     if missing:
         lines.extend(["", "Missing cases: " + ", ".join(sorted(missing))])
@@ -136,15 +152,16 @@ def main() -> int:
 
     try:
         report = make_report(args.run.resolve(), args.allow_partial)
+        if args.output:
+            args.output.write_text(report, encoding="utf-8")
+        else:
+            print(report, end="")
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Evaluation run is invalid: {exc}")
         return 1
 
     if args.output:
-        args.output.write_text(report, encoding="utf-8")
         print(f"Wrote {args.output}")
-    else:
-        print(report, end="")
     return 0
 
 
