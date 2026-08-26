@@ -27,6 +27,20 @@ Raw output location:
 
 Do not publish a pass rate without the raw outputs and scoring notes. Small prompt suites are useful for regression checks, but they do not prove general reliability.
 
+## Validate and report a run
+
+Store local runs under `evals/results/`. See [the results guide](results/README.md) for the JSON format and raw-output layout.
+
+Generate a report with:
+
+```bash
+python scripts/eval_report.py evals/results/YOUR-RUN/run.json --output evals/results/YOUR-RUN/report.md
+```
+
+The script requires every case by default. It also checks that every grade is boolean and every referenced raw output exists. This prevents a summary from silently omitting failures or unsupported scores.
+
+For the boundary between repository checks and model-performance evidence, read [what the repository proves](../docs/evidence.md).
+
 ## Repository checks
 
 Run:

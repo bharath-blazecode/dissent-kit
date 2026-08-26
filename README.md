@@ -137,7 +137,7 @@ DissentKit always supports Direct Review and Deliberation. Some hosts can run th
 
 ## Example
 
-See [the worked review](examples/example-review.md) for the same decision in Direct Review and Deliberation modes.
+Start with [the quick comparison](examples/quick-comparison.md) to see what Direct Review adds to a generic answer. Then read [the worked review](examples/example-review.md) for the same decision in Direct Review and Deliberation modes.
 
 ## Evaluation
 
@@ -150,6 +150,18 @@ python scripts/check_repo.py
 ```
 
 Read [evals/README.md](evals/README.md) to run the qualitative cases against a model or host.
+
+The project does not publish a model pass rate without raw outputs and grading notes. [What the repository proves](docs/evidence.md) separates the checks available today from claims that still need testing.
+
+## Build the small installation ZIP
+
+Release maintainers can build a package containing only the core skill files:
+
+```bash
+python scripts/build_skill_package.py
+```
+
+The command creates a versioned ZIP and SHA-256 checksum in `dist/`. The archive extracts to a single `dissent-kit` folder that can be placed in a supported skills directory.
 
 ## Origins
 
