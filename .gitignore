@@ -2,4 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
-evals/results/
+dist/
+evals/results/*
+!evals/results/README.md

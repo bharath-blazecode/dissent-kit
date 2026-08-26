@@ -8,6 +8,10 @@
 - Replaced the oversized PNG artwork with optimized JPEGs that meet GitHub's social-preview limit.
 - Added image-size validation and visible CI, license, and version badges.
 - Updated the launch kit for the live repository and the 0.3.0 release.
+- Added an explicitly illustrative quick comparison without presenting it as benchmark evidence.
+- Added a reproducible manual-evaluation report format that requires raw outputs.
+- Added a deterministic five-file installation package builder with a SHA-256 checksum.
+- Documented what the repository proves and which performance claims still need testing.
 
 ## 0.2.0
 

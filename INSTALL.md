@@ -32,9 +32,15 @@ Dissent this.
 
 ## Codex manual installation
 
+If the GitHub release includes `dissent-kit-0.3.0.zip`, download that file and extract it. It already contains a folder named `dissent-kit` with only the files the skill needs.
+
+If no release package is available yet:
+
 1. On GitHub, select **Code**, then **Download ZIP**.
 2. Extract the ZIP and rename the extracted folder to `dissent-kit`.
 3. Move it into your personal skills folder at `~/.agents/skills/dissent-kit/`.
+
+For a release package, verify the SHA-256 checksum when your download tool supports it. The `.zip.sha256` file published beside the ZIP contains the expected value.
 
 On Windows, `~` means your user folder, usually `C:\Users\YOUR-NAME`.
 

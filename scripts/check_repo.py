@@ -27,9 +27,14 @@ def check_required_files() -> None:
         "agents/openai.yaml",
         "references/deliberation.md",
         "examples/example-review.md",
+        "examples/quick-comparison.md",
         "evals/cases.json",
+        "evals/results/README.md",
+        "docs/evidence.md",
         "assets/dissent-kit-social-preview-v2.jpg",
         "assets/dissent-kit-internal-workflow.jpg",
+        "scripts/build_skill_package.py",
+        "scripts/eval_report.py",
         "platforms/codex/README.md",
         "platforms/cursor/.cursor/rules/dissent-kit.mdc",
     ]
@@ -208,6 +213,15 @@ def check_deprecated_files() -> None:
         fail("Deprecated .cursorrules file found; use .cursor/rules/*.mdc")
 
 
+def check_python_syntax() -> None:
+    for path in (ROOT / "scripts").glob("*.py"):
+        try:
+            source = path.read_text(encoding="utf-8")
+            compile(source, str(path), "exec")
+        except (OSError, SyntaxError) as exc:
+            fail(f"Invalid Python script {path.relative_to(ROOT)}: {exc}")
+
+
 def main() -> int:
     check_required_files()
     check_skill_frontmatter()
@@ -216,6 +230,7 @@ def main() -> int:
     check_eval_cases()
     check_preview_images()
     check_deprecated_files()
+    check_python_syntax()
 
     if ERRORS:
         print("DissentKit validation failed:")
@@ -224,7 +239,10 @@ def main() -> int:
         return 1
 
     print("DissentKit validation passed.")
-    print("Checked skill metadata, links, prose, fixtures, platform files, and artwork.")
+    print(
+        "Checked skill metadata, links, prose, fixtures, scripts, platform files, "
+        "and artwork."
+    )
     return 0
 
 
