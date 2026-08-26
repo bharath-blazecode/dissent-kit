@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 import struct
@@ -12,6 +13,21 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ERRORS: list[str] = []
+INSTRUCTION_ADAPTERS = (
+    "SKILL.md",
+    "platforms/chatgpt/custom-gpt-instructions.md",
+    "platforms/codex/AGENTS.example.md",
+    "platforms/copilot/copilot-instructions.md",
+    "platforms/cursor/.cursor/rules/dissent-kit.mdc",
+    "platforms/universal/PROMPT.md",
+)
+PACKAGE_FILES = {
+    "SKILL.md",
+    "LICENSE",
+    "NOTICE.md",
+    "agents/openai.yaml",
+    "references/deliberation.md",
+}
 
 
 def fail(message: str) -> None:
@@ -35,7 +51,19 @@ def check_required_files() -> None:
         "assets/dissent-kit-internal-workflow.jpg",
         "scripts/build_skill_package.py",
         "scripts/eval_report.py",
+        "docs/maintainer-guide.md",
+        ".github/CODEOWNERS",
+        ".github/PULL_REQUEST_TEMPLATE.md",
+        ".github/workflows/validate.yml",
+        ".github/ISSUE_TEMPLATE/bug_report.yml",
+        ".github/ISSUE_TEMPLATE/feature_request.yml",
+        ".github/ISSUE_TEMPLATE/config.yml",
         "platforms/codex/README.md",
+        "platforms/codex/AGENTS.example.md",
+        "platforms/chatgpt/custom-gpt-instructions.md",
+        "platforms/claude-code/README.md",
+        "platforms/copilot/copilot-instructions.md",
+        "platforms/universal/PROMPT.md",
         "platforms/cursor/.cursor/rules/dissent-kit.mdc",
     ]
     for relative in required:
@@ -61,6 +89,105 @@ def check_skill_frontmatter() -> None:
         fail("SKILL.md needs a discriminating description")
     if len(text.splitlines()) > 180:
         fail("SKILL.md is too long for the entrypoint; move detail to references")
+
+
+def skill_version() -> str | None:
+    text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+    match = re.search(r'^\s*version:\s*["\']?([^"\'\n]+)', text, re.MULTILINE)
+    if not match:
+        fail("SKILL.md metadata needs a version")
+        return None
+    return match.group(1).strip()
+
+
+def check_version_consistency() -> None:
+    version = skill_version()
+    if version is None:
+        return
+    expected = {
+        "README.md": f"version-{version}-",
+        "CHANGELOG.md": f"## {version}",
+        "INSTALL.md": f"dissent-kit-{version}.zip",
+        "docs/launch-kit.md": f"DissentKit {version}:",
+    }
+    for relative, marker in expected.items():
+        text = (ROOT / relative).read_text(encoding="utf-8")
+        if marker not in text:
+            fail(f"Version {version} is not reflected in {relative}")
+
+
+def check_openai_metadata() -> None:
+    path = ROOT / "agents" / "openai.yaml"
+    text = path.read_text(encoding="utf-8")
+    values = {}
+    for key in ("display_name", "short_description", "brand_color", "default_prompt"):
+        match = re.search(rf'^\s+{key}:\s+"([^"]+)"\s*$', text, re.MULTILINE)
+        if not match:
+            fail(f"agents/openai.yaml needs a quoted {key}")
+            continue
+        values[key] = match.group(1)
+    if values.get("display_name") != "DissentKit":
+        fail("agents/openai.yaml display_name must be DissentKit")
+    short_description = values.get("short_description", "")
+    if short_description and not 25 <= len(short_description) <= 64:
+        fail("agents/openai.yaml short_description must be 25 to 64 characters")
+    brand_color = values.get("brand_color", "")
+    if brand_color and not re.fullmatch(r"#[0-9A-Fa-f]{6}", brand_color):
+        fail("agents/openai.yaml brand_color must be a six-digit hex color")
+    if "$dissent-kit" not in values.get("default_prompt", ""):
+        fail("agents/openai.yaml default_prompt must mention $dissent-kit")
+    if not re.search(
+        r"^\s+allow_implicit_invocation:\s+true\s*$", text, re.MULTILINE
+    ):
+        fail("agents/openai.yaml must preserve implicit invocation")
+
+
+def check_adapter_parity() -> None:
+    markers = {
+        "direct invocation": "dissent this",
+        "deep invocation": "dissent this deeply",
+        "certainty labels": "[certain]",
+        "diagnosis-only exception": "diagnosis only",
+        "new-evidence update": "new evidence",
+        "no invented flaw": "already strong",
+        "execution label": "single-context deliberation",
+        "pre-mortem": "pre-mortem",
+        "falsifier": "falsifier",
+        "first action": "first action",
+        "independence limitation": "independent",
+    }
+    chess_markers = ("rook", "bishop", "knight", "queen", "king")
+    for relative in INSTRUCTION_ADAPTERS:
+        text = (ROOT / relative).read_text(encoding="utf-8").lower()
+        if relative == "SKILL.md":
+            text += (ROOT / "references" / "deliberation.md").read_text(
+                encoding="utf-8"
+            ).lower()
+        for label, marker in markers.items():
+            if marker not in text:
+                fail(f"Adapter parity failed in {relative}: missing {label}")
+        for marker in chess_markers:
+            if marker not in text:
+                fail(f"Adapter parity failed in {relative}: missing {marker} lens")
+
+
+def check_package_manifest() -> None:
+    path = ROOT / "scripts" / "build_skill_package.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    manifest = None
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == "PACKAGE_FILES"
+            for target in node.targets
+        ):
+            try:
+                manifest = set(ast.literal_eval(node.value))
+            except (TypeError, ValueError):
+                fail("Package manifest must be a literal sequence of file paths")
+                return
+            break
+    if manifest != PACKAGE_FILES:
+        fail("Package manifest must contain exactly the five core skill files")
 
 
 def check_markdown_links() -> None:
@@ -222,15 +349,30 @@ def check_python_syntax() -> None:
             fail(f"Invalid Python script {path.relative_to(ROOT)}: {exc}")
 
 
+def check_empty_files() -> None:
+    ignored_parts = {".git", "dist", "__pycache__"}
+    for path in ROOT.rglob("*"):
+        relative_parts = path.relative_to(ROOT).parts
+        if not path.is_file() or ignored_parts.intersection(relative_parts):
+            continue
+        if path.stat().st_size == 0:
+            fail(f"Empty repository file: {path.relative_to(ROOT)}")
+
+
 def main() -> int:
     check_required_files()
     check_skill_frontmatter()
+    check_version_consistency()
+    check_openai_metadata()
+    check_adapter_parity()
+    check_package_manifest()
     check_markdown_links()
     check_public_prose()
     check_eval_cases()
     check_preview_images()
     check_deprecated_files()
     check_python_syntax()
+    check_empty_files()
 
     if ERRORS:
         print("DissentKit validation failed:")
