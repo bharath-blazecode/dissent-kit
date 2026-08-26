@@ -23,6 +23,14 @@ prompt-engineering
 open-source
 ```
 
+## Homepage
+
+Use the plain-language installation guide:
+
+```text
+https://github.com/bharath-blazecode/dissent-kit/blob/main/INSTALL.md
+```
+
 ## Social preview
 
 Upload `assets/dissent-kit-social-preview-v2.jpg` in the repository's social preview settings. The file is under GitHub's 1 MB limit. After uploading it, share the repository URL once and confirm that the custom image appears. The internal workflow graphic is `assets/dissent-kit-internal-workflow.jpg`.
@@ -63,16 +71,16 @@ Repository: https://github.com/bharath-blazecode/dissent-kit
 
 ## Launch checklist
 
-1. Merge the launch-integrity changes into `main`.
-2. Add the description and topics above in the repository settings.
+1. Confirm the release-preparation changes are on `main` and CI passes.
+2. Add the description, homepage, and topics above in the repository settings.
 3. Upload `assets/dissent-kit-social-preview-v2.jpg` and verify the shared-link preview.
 4. Test installation from a clean folder.
-5. Create and push the `v0.3.0` tag.
-6. Create the GitHub release with the supplied notes.
-7. Run every case in `evals/cases.json` on the main host you plan to advertise.
-8. Publish raw outputs and scoring notes before quoting a pass rate.
-9. Share one concrete before-and-after example instead of a feature list.
-10. Turn recurring failed prompts into evaluation fixtures.
+5. Build the release ZIP and SHA-256 checksum with `python scripts/build_skill_package.py`.
+6. Create and push the `v0.3.0` tag.
+7. Create the GitHub release with the supplied notes and attach both generated files.
+8. Run every case in `evals/cases.json` on the main host you plan to advertise.
+9. Publish raw outputs and scoring notes before quoting a pass rate.
+10. Share one concrete before-and-after example and turn recurring failures into evaluation fixtures.
 
 ## What to avoid
 

@@ -1,18 +1,42 @@
-name: Validate DissentKit
+name: Validate and package DissentKit
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: "3.13"
+          - os: windows-latest
+            python-version: "3.10"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - run: python scripts/check_repo.py
+      - run: python scripts/build_skill_package.py --output-dir build
+      - run: python -m zipfile -t build/dissent-kit-0.3.0.zip
+      - name: Keep the release package from the Linux run
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dissent-kit-0.3.0
+          path: build/*
+          if-no-files-found: error

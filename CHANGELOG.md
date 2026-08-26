@@ -12,6 +12,10 @@
 - Added a reproducible manual-evaluation report format that requires raw outputs.
 - Added a deterministic five-file installation package builder with a SHA-256 checksum.
 - Documented what the repository proves and which performance claims still need testing.
+- Aligned diagnosis-only, new-evidence, and deeper-invocation behavior across standalone adapters.
+- Added adapter, metadata, version, package-manifest, script, and empty-file validation.
+- Expanded CI to test and package the skill on Windows and Linux.
+- Added issue forms, a pull request template, CODEOWNERS, and maintainer guidance.
 
 ## 0.2.0
 

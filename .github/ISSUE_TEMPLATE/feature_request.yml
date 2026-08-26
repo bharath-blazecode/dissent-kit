@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose a focused improvement to DissentKit
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the recurring failure or missing capability.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Explain the smallest change that would address the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Example or evidence
+      description: Include a prompt and output when the request concerns behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affected area
+      options:
+        - Core skill
+        - Deliberation protocol
+        - Platform adapter
+        - Installation
+        - Evaluation
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: evaluation
+    attributes:
+      label: How should it be tested?
+      description: Name an existing case or suggest a new observable check.
