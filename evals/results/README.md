@@ -19,6 +19,10 @@ Use this shape for `run.json`:
   "metadata": {
     "host": "Codex desktop",
     "model": "record the exact model name",
+    "model_settings": "record relevant settings or say default",
+    "adapter": "root SKILL.md",
+    "source_commit": "full commit SHA",
+    "grader": "human name or documented grading method",
     "date": "2026-08-26",
     "dissent_kit_version": "0.3.0"
   },

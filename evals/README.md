@@ -8,7 +8,7 @@
 2. Install or paste the matching DissentKit adapter.
 3. Send each `request` from `cases.json` in a fresh conversation.
 4. Check the output against every item in `checks`.
-5. Record the host, model, date, pass count, failures, and raw outputs.
+5. Record the host, exact model, model settings, adapter, source commit, grader, date, failures, and raw outputs.
 
 Use a fresh conversation for each case so earlier examples do not steer later responses.
 
@@ -17,6 +17,10 @@ Use a fresh conversation for each case so earlier examples do not steer later re
 ```text
 Host:
 Model:
+Model settings:
+Adapter:
+Source commit:
+Grader:
 Date:
 DissentKit version:
 Cases passed:
