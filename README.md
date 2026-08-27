@@ -26,10 +26,10 @@ This is an author-written illustration, not a benchmark result. Read [the full c
 
 **Any AI assistant, no installation:** open [the universal prompt](platforms/universal/PROMPT.md), copy it into a new conversation, and say `dissent this`. This works with ChatGPT, Claude, Gemini, and other assistants that accept pasted instructions.
 
-**Optional Codex installation:** paste this into a Codex task:
+**Optional installation:** paste this into a AI assistant task:
 
 ```text
-$skill-installer Install DissentKit from https://github.com/bharath-blazecode/dissent-kit using the repository root, and name it dissent-kit.
+$ skill-installer Install DissentKit from https://github.com/bharath-blazecode/dissent-kit using the repository root, and name it dissent-kit.
 ```
 
 **Optional coding-agent installation:** if Node.js is installed, let the open [skills CLI](https://github.com/vercel-labs/skills) detect your agent:
